@@ -1,8 +1,10 @@
-""" scraper_pdf.py: Quick script to scrape PDF papers from Google Scholar of the SIGCHI Conference.
+""" crawler.py: Quick script to scrape PDF papers from Google Scholar of the SIGCHI Conference.
 
 Examples:
-    $ python3 scraper_pdf.py --help
-    $ python3 scraper_pdf.py --from-file paper_list.json --bib-output references.bib
+    $ python3 crawler.py --help
+    $ python3 crawler.py --from-file doi_authors.json
+    $ python3 crawler.py --from-file doi_authors.json --slow
+    $ python3 crawler.py --from-file doi_authors.json --bib-output references.bib
 Requires:
     Packages 'scholarly' and 'BeautifulSoup' from pip3.
 """
@@ -140,10 +142,10 @@ def main(args):
 
     if args.from_file:
         try:
-            with open("doi_years.json", 'r') as f:
+            with open("doi_authors.json", 'r') as f:
                 titles = json.load(f)
 
-            for i in range(0, 9689): #Missing 6.pdf and 98.pdf #6483
+            for i in range(0, 5): #Missing 6.pdf and 98.pdf #6483
                 print("Title: ", titles[i]['Title'])
                 
                 search = titles[i]['Title']
@@ -163,19 +165,6 @@ def main(args):
 
 
 if __name__ == "__main__":
-    
-
-    # Set up a ProxyGenerator object to use free proxies
-    # This needs to be done only once per session
-    
-    pg = ProxyGenerator()
-    #pg.FreeProxies()
-    tor = 'C:/Users/Utilizador/Desktop/Thesis/Tor Browser/Browser/TorBrowser/Tor/tor.exe'
-    success = pg.Tor_Internal(tor_cmd = "tor")
-    scholarly.use_proxy(pg)
-
-    print("Proxy done\n")
-
     #group.add_argument("--search", type=str,
     parser = argparse.ArgumentParser(description="Papers from Google Scholar.")
     group = parser.add_mutually_exclusive_group()
@@ -190,12 +179,17 @@ if __name__ == "__main__":
 
     list_pdf_not_downloaded = []
 
-    # echo 'alias scraper="python $$PATH_TO_EXE/scraper_pdf.py"' >> ~/.bashrc
+    # Set up a ProxyGenerator object to use free proxies
+    # This needs to be done only once per session
+    
+    pg = ProxyGenerator()
+    success = pg.FreeProxies()
+    #success = pg.Tor_Internal(tor_cmd = "tor")
+    scholarly.use_proxy(pg)
 
-    # scraper --from-file doi_years.json --slow
+    print("Proxy done\n")
 
-    #python ../Crawler/scraper_pdf.py --from-file doi_years.json --slow
-
+    #python ../crawler.py --from-file ../doi_authors.json --slow
 
     main(args)
 

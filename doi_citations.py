@@ -30,9 +30,3 @@ for i in range(0, 9688):
     if counter == 100:
         print(f"Waiting {350:5.0f} seconds")
         time.sleep(300)
-
-
-#sch = SemanticScholar()
-#
-#paper = sch.get_paper('10.1145/800045.801571')
-#print(paper.citationCount)

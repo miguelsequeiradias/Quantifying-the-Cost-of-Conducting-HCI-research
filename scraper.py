@@ -184,6 +184,26 @@ from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 from bs4 import BeautifulSoup
 import csv
+import json
+
+def csv_to_json(csvFilePath, jsonFilePath):
+    jsonArray = []
+      
+    #read csv file
+    with open(csvFilePath, encoding='utf-8') as csvf: 
+        #load csv file data using csv library's dictionary reader
+        csvReader = csv.DictReader(csvf) 
+
+        #convert each csv row into python dict
+        for row in csvReader: 
+            #add this python dict to json array
+            jsonArray.append(row)
+  
+    #convert python jsonArray to JSON String and write to file
+    with open(jsonFilePath, 'w', encoding='utf-8') as jsonf: 
+        jsonString = json.dumps(jsonArray, indent=4)
+        jsonf.write(jsonString)
+
 
 outfile = open('doi_authors.csv','a', newline='')
 writer = csv.writer(outfile)
@@ -344,6 +364,9 @@ for chi in chi_only_proceedings_links_entry:
                 no_links += 1
                 continue
 
-print(no_links)
-print(count)
 outfile.close()
+
+jsonFilePath = r'doi_authors.json'
+csvFilePath = r'doi_authors.csv'
+
+csv_to_json(csvFilePath, jsonFilePath)
